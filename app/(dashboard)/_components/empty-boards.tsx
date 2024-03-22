@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import Icons from '@/components/ui/icons'
+import { defaultBoardTitle } from '@/constants'
 import { api } from '@/convex/_generated/api'
 import { useOrganization } from '@clerk/nextjs'
 import { useMutation } from 'convex/react'
@@ -19,7 +20,7 @@ const EmptyBoards = () => {
 
     startTransition(() => {
       create({
-        title: 'Untitled',
+        title: defaultBoardTitle,
         orgId: organization.id,
       })
         .then(() => toast.success('Board created'))
