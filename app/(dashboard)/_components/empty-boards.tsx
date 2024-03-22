@@ -7,11 +7,13 @@ import { api } from '@/convex/_generated/api'
 import { useOrganization } from '@clerk/nextjs'
 import { useMutation } from 'convex/react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 
 const EmptyBoards = () => {
   const [isPending, startTransition] = useTransition()
+  const router = useRouter()
   const create = useMutation(api.board.create)
   const { organization } = useOrganization()
 
@@ -23,7 +25,10 @@ const EmptyBoards = () => {
         title: defaultBoardTitle,
         orgId: organization.id,
       })
-        .then(() => toast.success('Board created'))
+        .then((id) => {
+          toast.success('Board created')
+          router.push(`/boards/${id}`)
+        })
         .catch(() => toast.error('Failed to create board'))
     })
   }

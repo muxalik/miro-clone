@@ -5,6 +5,7 @@ import { api } from '@/convex/_generated/api'
 import { cn } from '@/lib/utils'
 import { useMutation } from 'convex/react'
 import { Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 
@@ -16,6 +17,7 @@ interface NewBoardButtonProps {
 const NewBoardButton = ({ orgId, disabled }: NewBoardButtonProps) => {
   const create = useMutation(api.board.create)
   const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
   const onClick = () => {
     startTransition(() => {
@@ -23,7 +25,10 @@ const NewBoardButton = ({ orgId, disabled }: NewBoardButtonProps) => {
         title: defaultBoardTitle,
         orgId,
       })
-        .then(() => toast.success('Board created'))
+        .then((id) => {
+          toast.success('Board created')
+          router.push(`/boards/${id}`)
+        })
         .catch(() => toast.error('Failed to create board'))
     })
   }
@@ -34,7 +39,8 @@ const NewBoardButton = ({ orgId, disabled }: NewBoardButtonProps) => {
       onClick={onClick}
       className={cn(
         'col-span-1 aspect-[100/127] bg-blue-600 rounded-lg hover:bg-blue-800 flex flex-col items-center justify-center py-6 transition-colors',
-        (isPending || disabled) && 'opacity-75 hover:bg-blue-600 cursor-not-allowed'
+        (isPending || disabled) &&
+          'opacity-75 hover:bg-blue-600 cursor-not-allowed'
       )}
     >
       <div />

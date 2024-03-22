@@ -19,7 +19,7 @@ const SearchInput = () => {
   useEffect(() => {
     const url = qs.stringifyUrl(
       {
-        url: '/',
+        url: window.location.href,
         query: {
           search: debouncedValue,
         },
