@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import Overlay from './overlay'
@@ -7,6 +9,11 @@ import Footer from './footer'
 import { Skeleton } from '@/components/ui/skeleton'
 import Actions from '@/components/shared/actions'
 import { MoreHorizontal } from 'lucide-react'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
+import { useTransition } from 'react'
+import { Id } from '@/convex/_generated/dataModel'
+import { toast } from 'sonner'
 
 interface BoardCardProps {
   id: string
@@ -30,11 +37,31 @@ const BoardCard = ({
   isFavorite,
 }: BoardCardProps) => {
   const { userId } = useAuth()
+  const favorite = useMutation(api.board.favorite)
+  const unfavorite = useMutation(api.board.unfavorite)
+  const [isPending, startTransition] = useTransition()
 
   const authorLabel = userId === authorId ? 'You' : authorName
   const createdAtLabel = formatDistanceToNow(createdAt, {
     addSuffix: true,
   })
+
+  const toggleFavorite = () => {
+    startTransition(() => {
+      if (isFavorite) {
+        unfavorite({ id: id as Id<'boards'> }).catch(() =>
+          toast.error('Failed to unfavorite board')
+        )
+
+        return
+      }
+
+      favorite({
+        id: id as Id<'boards'>,
+        orgId,
+      }).catch(() => toast.error('Failed to favorite board'))
+    })
+  }
 
   return (
     <Link href={`/boards/${id}`}>
@@ -53,8 +80,8 @@ const BoardCard = ({
           title={title}
           authorLabel={authorLabel}
           createdAtLabel={createdAtLabel}
-          onClick={() => {}}
-          disabled={false}
+          onClick={toggleFavorite}
+          disabled={isPending}
         />
       </div>
     </Link>
