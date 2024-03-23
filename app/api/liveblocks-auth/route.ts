@@ -1,3 +1,4 @@
+import { defaultUserName } from '@/constants'
 import { api } from '@/convex/_generated/api'
 import { auth, currentUser } from '@clerk/nextjs'
 import { Liveblocks } from '@liveblocks/node'
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
   }
 
   const userInfo = {
-    name: user.firstName || 'Anonymous',
+    name: user.firstName || defaultUserName,
     picture: user.imageUrl,
   }
 

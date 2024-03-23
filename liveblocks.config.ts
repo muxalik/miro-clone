@@ -73,6 +73,7 @@ type UserMeta = {
     name?: string
     avatar?: string
     colors?: string[]
+    picture?: string
   }
 }
 
