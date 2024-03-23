@@ -30,7 +30,7 @@ const Participants = () => {
             key='me'
             borderColor={connectionIdToColor(currentUser.connectionId)}
             src={currentUser.info?.picture}
-            name={currentUser.info?.name}
+            name={`${currentUser.info?.name} (You)`}
             fallback={currentUser.info?.name?.[0]}
           />
         )}
