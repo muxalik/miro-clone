@@ -83,4 +83,6 @@ const LayerPreview = memo(
   }
 )
 
+LayerPreview.displayName = 'LayerPreview'
+
 export default LayerPreview

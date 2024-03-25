@@ -199,4 +199,6 @@ const SelectionBox = memo(
   }
 )
 
+SelectionBox.displayName = 'SelectionBox'
+
 export default SelectionBox
